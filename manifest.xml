@@ -9,8 +9,8 @@
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="AccessPlan"/>
   <Description DefaultValue="AccessPlan Outlook add-in."/>
-  <IconUrl DefaultValue="https://github.com/adeelumarit54/AccessPlane.git/assets/icon-64.png"/>
-  <HighResolutionIconUrl DefaultValue="https://github.com/adeelumarit54/AccessPlane.git/assets/icon-128.png"/>
+  <IconUrl DefaultValue="https://adeelumarit54.github.io/AccessPlane/assets/icon-64.png"/>
+  <HighResolutionIconUrl DefaultValue="https://adeelumarit54.github.io/AccessPlane/assets/icon-128.png"/>
   <SupportUrl DefaultValue="https://www.contoso.com/help"/>
   <AppDomains>
     <AppDomain>https://www.contoso.com</AppDomain>
@@ -26,7 +26,7 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://github.com/adeelumarit54/AccessPlane.git/taskpane.html"/>
+        <SourceLocation DefaultValue="https://adeelumarit54.github.io/AccessPlane/taskpane.html"/>
         <RequestedHeight>250</RequestedHeight>
       </DesktopSettings>
     </Form>
@@ -80,13 +80,13 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="Icon.16x16" DefaultValue="https://github.com/adeelumarit54/AccessPlane.git/assets/icon-16.png"/>
-        <bt:Image id="Icon.32x32" DefaultValue="https://github.com/adeelumarit54/AccessPlane.git/assets/icon-32.png"/>
-        <bt:Image id="Icon.80x80" DefaultValue="https://github.com/adeelumarit54/AccessPlane.git/assets/icon-80.png"/>
+        <bt:Image id="Icon.16x16" DefaultValue="https://adeelumarit54.github.io/AccessPlane/assets/icon-16.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://adeelumarit54.github.io/AccessPlane/assets/icon-32.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://adeelumarit54.github.io/AccessPlane/assets/icon-80.png"/>
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="Commands.Url" DefaultValue="https://github.com/adeelumarit54/AccessPlane.git/commands.html"/>
-        <bt:Url id="Taskpane.Url" DefaultValue="https://github.com/adeelumarit54/AccessPlane.git/taskpane.html"/>
+        <bt:Url id="Commands.Url" DefaultValue="https://adeelumarit54.github.io/AccessPlane/commands.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://adeelumarit54.github.io/AccessPlane/taskpane.html"/>
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="GroupLabel" DefaultValue="AccessPlan"/>
