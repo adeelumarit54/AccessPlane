@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Selection</title>
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+    <script type="module" src="https://unpkg.com/@fluentui/web-components"></script>
+
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 30px auto;
+            max-width: 800px;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+
+        fluent-select,
+        fluent-text-field {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background-color: #f3f3f3;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f1f9ff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <fluent-select id="companyDropdown">
+        <fluent-option value="">All Companies</fluent-option>
+    </fluent-select>
+
+    <fluent-text-field id="surnameSearch" placeholder="Search by surname..." appearance="outline"
+        @keyup="filterTable()"></fluent-text-field>
+
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>Forename</th>
+                <th>Surname</th>
+                <th>Email</th>
+                <th>Company</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        let userData = [];
+        let accessToken = '';
+        let filteredData = [];
+    
+        Office.initialize = function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            accessToken = urlParams.get('token');
+    
+            if (!accessToken) {
+                console.error('No access token provided');
+                return;
+            }
+    
+            loadUsers();
+        }
+    
+        function loadUsers() {
+            fetch("https://outlookdemo.accessplanit.com/accessplansandbox/api/v2/user", {
+                method: "GET",
+                headers: { "Authorization": `Bearer ${accessToken}` }
+            })
+                .then(response => response.json())
+                .then(result => {
+                    userData = result.results;
+                    filteredData = userData; // Set initial
+                    populateCompanyDropdown(userData);
+                    loadTableData(userData);
+                })
+                .catch(console.error);
+        }
+    
+        function populateCompanyDropdown(users) {
+            const dropdown = document.getElementById("companyDropdown");
+            const companies = [...new Set(users
+                .map(user => user.MainCompanyName)
+                .filter(name => name && name.trim() !== ""))];
+    
+            companies.forEach(company => {
+                const option = document.createElement("fluent-option");
+                option.value = company;
+                option.textContent = company;
+                dropdown.appendChild(option);
+            });
+    
+            dropdown.addEventListener("change", handleFilters);
+        }
+    
+        document.getElementById("surnameSearch").addEventListener("input", handleFilters);
+    
+        function handleFilters() {
+            const selectedCompany = document.getElementById("companyDropdown").value;
+            const searchValue = document.getElementById("surnameSearch").value.toLowerCase();
+    
+            // Filter first by company
+            filteredData = userData.filter(user => {
+                return selectedCompany === "" || user.MainCompanyName === selectedCompany;
+            });
+    
+            // Then filter that by surname
+            if (searchValue !== "") {
+                filteredData = filteredData.filter(user =>
+                    user.Surname && user.Surname.toLowerCase().includes(searchValue)
+                );
+            }
+    
+            loadTableData(filteredData);
+        }
+    
+        function loadTableData(data) {
+            const tbody = document.querySelector("#dataTable tbody");
+            tbody.innerHTML = "";
+    
+            data.forEach((item, index) => {
+                const row = `
+                    <tr>
+                        <td><input type="checkbox" data-index="${index}" onchange="logChecked(this)"></td>
+                        <td>${item.Forenames}</td>
+                        <td>${item.Surname}</td>
+                        <td>${item.Email}</td>
+                        <td>${item.MainCompanyName || ""}</td>
+                    </tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+    
+        function logChecked(checkbox) {
+            const index = checkbox.getAttribute("data-index");
+            if (checkbox.checked) {
+                console.log("Checked User:", filteredData[index]);
+                Office.context.ui.messageParent(JSON.stringify(filteredData[index]));
+            }
+        }
+    </script>
+    
+</body>
+
+</html>
